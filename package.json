@@ -1,0 +1,10 @@
+{
+  "name": "group-project-1",
+  "version": "1.0.0",
+  "description": "TECHIE 1121 Project 1 — team app",
+  "private": true,
+  "scripts": {
+    "dev": "python3 -m http.server 8000 --directory code_deliverable",
+    "test:build": "bash scripts/build-pages-artifact.sh && echo 'Pages build OK — preview with: python3 -m http.server 8001 --directory _site'"
+  }
+}

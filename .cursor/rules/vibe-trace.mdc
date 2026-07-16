@@ -1,0 +1,38 @@
+---
+description: Log every AI coding interaction to log_deliverable/history.md (course requirement)
+globs: ["**/code_deliverable/**"]
+alwaysApply: true
+---
+
+# Vibe-Trace Rule (Cursor)
+
+This repo is for **TECHIE 1121 — Ethical Vibe Coding**. Documenting *how* you build
+with AI is a graded requirement. Full canonical instructions: `AGENTS.md`.
+
+Whenever you create or edit files inside any `code_deliverable/` directory, you MUST
+log the interaction to the sibling `log_deliverable/history.md` (e.g.
+`../log_deliverable/history.md`). Create the file if it does not exist.
+
+**Prepend each new entry to the TOP of `history.md`** (newest first), using this template:
+
+```markdown
+## [Local Time: YYYY-MM-DD HH:MM:SS]
+
+**User Prompt**:
+> [Insert the exact user prompt here]
+
+**Metadata & Annotations**:
+- **Time**: [Local time]
+- **Tool**: Cursor
+- **Annotations**: [Any instructions or context attached to the prompt]
+
+**Input Files**:
+- [Files read or modified as direct context]
+
+**Action Summary**:
+- [What you changed and why]
+
+---
+```
+
+Do this every turn that touches a `code_deliverable/`, without being asked.

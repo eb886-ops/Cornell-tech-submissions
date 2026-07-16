@@ -1,0 +1,66 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+
+      - name: Build Pages artifact
+        run: bash scripts/build-pages-artifact.sh
+
+      # The committed CNAME (vibe-coding-ethics.tech.cornell.edu) belongs ONLY to the
+      # canonical course repo. In a student's GitHub Classroom copy it would collide
+      # with that already-claimed custom domain and break their Pages deploy, so we
+      # strip it in any non-canonical repo. Each student fork then publishes to its
+      # default https://<owner>.github.io/<repo>/ URL.
+      - name: Remove custom domain (CNAME) in student copies
+        if: github.repository != 'Cornell-Tech-Vibe-Coding-Summer-2026/class'
+        run: rm -f _site/CNAME
+
+      - name: Enable Pages for GitHub Actions
+        run: |
+          gh api "repos/${GITHUB_REPOSITORY}/pages" >/dev/null 2>&1 || \
+            gh api --method POST "repos/${GITHUB_REPOSITORY}/pages" \
+              --field build_type=workflow >/dev/null
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v6
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: '_site'
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
