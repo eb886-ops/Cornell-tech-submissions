@@ -17,7 +17,9 @@ function figmaAssetResolver() {
 }
 
 export default defineConfig({
-  base: process.env.GITHUB_ACTIONS ? '/Cornell-tech-submissions/' : '/',
+  base: process.env.GITHUB_ACTIONS
+    ? `/${(process.env.GITHUB_REPOSITORY || '').split('/')[1] || 'Cornell-tech-submissions'}/`
+    : '/',
   plugins: [
     figmaAssetResolver(),
     // The React and Tailwind plugins are both required for Make, even if

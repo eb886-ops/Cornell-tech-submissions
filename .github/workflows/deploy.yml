@@ -25,26 +25,13 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: '24'
+          cache: 'npm'
 
-      - name: Build Pages artifact
-        run: bash scripts/build-pages-artifact.sh
+      - name: Install dependencies
+        run: npm ci
 
-      # The committed CNAME (vibe-coding-ethics.tech.cornell.edu) belongs ONLY to the
-      # canonical course repo. In a student's GitHub Classroom copy it would collide
-      # with that already-claimed custom domain and break their Pages deploy, so we
-      # strip it in any non-canonical repo. Each student fork then publishes to its
-      # default https://<owner>.github.io/<repo>/ URL.
-      - name: Remove custom domain (CNAME) in student copies
-        if: github.repository != 'Cornell-Tech-Vibe-Coding-Summer-2026/class'
-        run: rm -f _site/CNAME
-
-      - name: Enable Pages for GitHub Actions
-        run: |
-          gh api "repos/${GITHUB_REPOSITORY}/pages" >/dev/null 2>&1 || \
-            gh api --method POST "repos/${GITHUB_REPOSITORY}/pages" \
-              --field build_type=workflow >/dev/null
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Build Vite site
+        run: npm run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v6
@@ -52,7 +39,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          path: '_site'
+          path: 'dist'
 
   deploy:
     environment:
