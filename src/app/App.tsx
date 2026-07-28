@@ -1,8 +1,6 @@
 import { useState, useMemo, useRef, useEffect } from "react";
-import { createRoot } from "react-dom/client";
 import { Search, Star, MapPin, ChevronDown, X, BookOpen, Users, School, ArrowRight, Filter, Plus, ThumbsUp, ChevronLeft, ChevronRight, AlertCircle } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import "../styles/index.css";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -911,9 +909,4 @@ export default function App() {
       </AnimatePresence>
     </div>
   );
-}
-
-const rootElement = document.getElementById("root");
-if (rootElement) {
-  createRoot(rootElement).render(<App />);
 }
