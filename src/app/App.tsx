@@ -1334,7 +1334,7 @@ export default function App() {
               <BookOpen size={16} className="text-white" />
             </div>
             <span className="font-['Lora'] font-bold text-lg text-foreground tracking-tight">
-              Rate<span className="text-primary">My</span>Landlord
+              Campus Rent
             </span>
           </a>
 
@@ -1772,7 +1772,7 @@ export default function App() {
               <BookOpen size={13} className="text-white" />
             </div>
             <span className="font-['Lora'] font-bold text-base text-white">
-              Rate<span className="text-[#FF8A80]">My</span>Landlord
+              Campus Rent
             </span>
           </div>
           <p className="text-white/30 text-xs text-center">
