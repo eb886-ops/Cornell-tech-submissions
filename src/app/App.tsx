@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef, useEffect } from "react";
-import { Search, Star, MapPin, ChevronDown, X, BookOpen, Users, School, ArrowRight, Filter, Plus, ThumbsUp, ChevronLeft, ChevronRight, AlertCircle } from "lucide-react";
+import { Search, Star, MapPin, ChevronDown, X, BookOpen, Users, School, ArrowRight, Filter, Plus, ThumbsUp, ChevronLeft, ChevronRight, AlertCircle, Heart, CircleHelp, Pencil } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -14,11 +14,28 @@ interface Review {
   helpful: number;
 }
 
+interface RentalProperty {
+  id: string;
+  title: string;
+  beds: number;
+  baths: number;
+  rent: number;
+  groundRules: string[];
+}
+
 interface Landlord {
   id: string;
   name: string;
   university: string;
   address: string;
+  photoUrl: string;
+  bio: string;
+  contactEmail: string;
+  contactPhone: string;
+  reviewedProperties: number;
+  propertyLocations: string[];
+  properties: RentalProperty[];
+  primaryJob: boolean;
   avgRating: number;
   reviewCount: number;
   reviews: Review[];
@@ -45,6 +62,17 @@ const LANDLORDS: Landlord[] = [
     name: "Greenfield Property Management",
     university: "University of Michigan",
     address: "412 S State St, Ann Arbor, MI 48109",
+    photoUrl: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=500&q=80",
+    bio: "Greenfield focuses on student-safe, well-maintained housing near central campus and has operated in Ann Arbor for over 12 years.",
+    contactEmail: "leasing@greenfieldpm.com",
+    contactPhone: "(734) 555-0142",
+    reviewedProperties: 21,
+    propertyLocations: ["Downtown Ann Arbor", "South University", "Kerrytown"],
+    properties: [
+      { id: "p1", title: "State Street Lofts", beds: 3, baths: 2, rent: 3150, groundRules: ["No smoking", "Quiet hours after 10pm", "Co-signer required"] },
+      { id: "p2", title: "Kerrytown Flats", beds: 2, baths: 1, rent: 2350, groundRules: ["No subletting without approval", "Pet fee required"] },
+    ],
+    primaryJob: true,
     avgRating: 4.2,
     reviewCount: 47,
     tags: ["Responsive", "Clean", "Fair Pricing"],
@@ -59,6 +87,16 @@ const LANDLORDS: Landlord[] = [
     name: "Campus Corner Rentals",
     university: "Ohio State University",
     address: "891 N High St, Columbus, OH 43201",
+    photoUrl: "https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&w=500&q=80",
+    bio: "Campus Corner manages dense off-campus inventory close to OSU and primarily serves undergrad tenants with short leasing cycles.",
+    contactEmail: "support@campuscornerrentals.com",
+    contactPhone: "(614) 555-0173",
+    reviewedProperties: 34,
+    propertyLocations: ["Short North", "University District", "Clintonville"],
+    properties: [
+      { id: "p3", title: "High Street Duplex", beds: 4, baths: 2, rent: 2800, groundRules: ["Monthly inspection notice", "No parties in common areas", "Trash schedule enforced"] },
+    ],
+    primaryJob: true,
     avgRating: 2.3,
     reviewCount: 62,
     tags: ["Slow Repairs", "Security Deposit Issues"],
@@ -73,6 +111,16 @@ const LANDLORDS: Landlord[] = [
     name: "Nittany Properties LLC",
     university: "Penn State",
     address: "247 E College Ave, State College, PA 16801",
+    photoUrl: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=500&q=80",
+    bio: "Nittany Properties is a small local operator balancing student and family units, with an emphasis on mid-range pricing.",
+    contactEmail: "hello@nittanyproperties.com",
+    contactPhone: "(814) 555-0191",
+    reviewedProperties: 13,
+    propertyLocations: ["College Ave", "Beaver Canyon", "North Atherton"],
+    properties: [
+      { id: "p4", title: "College Ave Classic", beds: 2, baths: 1, rent: 1950, groundRules: ["No smoking", "Tenant handles utilities", "12-month lease minimum"] },
+    ],
+    primaryJob: true,
     avgRating: 3.6,
     reviewCount: 38,
     tags: ["Average", "Decent Location"],
@@ -86,6 +134,16 @@ const LANDLORDS: Landlord[] = [
     name: "Lakeside Student Housing",
     university: "University of Wisconsin",
     address: "118 Langdon St, Madison, WI 53703",
+    photoUrl: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=500&q=80",
+    bio: "Lakeside runs premium student units near campus with an operations team known for proactive communication and upgrades.",
+    contactEmail: "team@lakesidestudenthousing.com",
+    contactPhone: "(608) 555-0126",
+    reviewedProperties: 18,
+    propertyLocations: ["Langdon", "State Street", "Capitol East"],
+    properties: [
+      { id: "p5", title: "Langdon Premium Suites", beds: 3, baths: 3, rent: 3900, groundRules: ["No overnight guests over 3 nights", "Building gym closes at 11pm", "Pet addendum required"] },
+    ],
+    primaryJob: true,
     avgRating: 4.7,
     reviewCount: 29,
     tags: ["Excellent", "Pet Friendly", "Modern Units"],
@@ -100,6 +158,16 @@ const LANDLORDS: Landlord[] = [
     name: "Hoosier Homes Management",
     university: "Indiana University",
     address: "302 E 3rd St, Bloomington, IN 47401",
+    photoUrl: "https://images.unsplash.com/photo-1573496799652-408c2ac9fe98?auto=format&fit=crop&w=500&q=80",
+    bio: "Hoosier Homes manages high-turnover student stock and also oversees commercial spaces in Bloomington.",
+    contactEmail: "office@hoosierhomesmgmt.com",
+    contactPhone: "(812) 555-0188",
+    reviewedProperties: 27,
+    propertyLocations: ["Downtown Bloomington", "Kirkwood", "East 3rd Corridor"],
+    properties: [
+      { id: "p6", title: "Kirkwood Shared House", beds: 5, baths: 2, rent: 3200, groundRules: ["No candles", "Mandatory renter insurance", "No wall-mounted TVs without permission"] },
+    ],
+    primaryJob: false,
     avgRating: 1.8,
     reviewCount: 74,
     tags: ["Avoid", "Mold Issues", "Unresponsive"],
@@ -114,6 +182,17 @@ const LANDLORDS: Landlord[] = [
     name: "Boilermaker Realty",
     university: "Purdue University",
     address: "614 State St, West Lafayette, IN 47906",
+    photoUrl: "https://images.unsplash.com/photo-1562788869-4ed32648eb72?auto=format&fit=crop&w=500&q=80",
+    bio: "Boilermaker Realty specializes in practical student leases around Purdue, with a focus on transparent terms and routine maintenance.",
+    contactEmail: "info@boilermakerrealty.com",
+    contactPhone: "(765) 555-0114",
+    reviewedProperties: 16,
+    propertyLocations: ["State Street", "Chauncey", "Levee District"],
+    properties: [
+      { id: "p7", title: "Chauncey Terrace", beds: 2, baths: 2, rent: 2200, groundRules: ["No smoking", "Parking pass required", "Noise curfew after 11pm"] },
+      { id: "p8", title: "Levee Studios", beds: 1, baths: 1, rent: 1450, groundRules: ["No pets", "Key replacement fee applies"] },
+    ],
+    primaryJob: true,
     avgRating: 3.9,
     reviewCount: 41,
     tags: ["Good Value", "Central Location"],
@@ -144,6 +223,17 @@ function ratingLabel(r: number): string {
   if (r >= 3) return "Average";
   if (r >= 2) return "Poor";
   return "Avoid";
+}
+
+function normalizeSearch(text: string): string {
+  return text.toLowerCase().replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function matchesSearch(haystack: string, rawQuery: string): boolean {
+  const normalizedHaystack = normalizeSearch(haystack);
+  const tokens = normalizeSearch(rawQuery).split(" ").filter(Boolean);
+  if (tokens.length === 0) return true;
+  return tokens.every((token) => normalizedHaystack.includes(token));
 }
 
 function StarRow({ rating, size = 14 }: { rating: number; size?: number }) {
@@ -189,7 +279,17 @@ function InteractiveStars({ value, onChange }: { value: number; onChange: (v: nu
 
 // ── Landlord Card ─────────────────────────────────────────────────────────────
 
-function LandlordCard({ landlord, onClick }: { landlord: Landlord; onClick: () => void }) {
+function LandlordCard({
+  landlord,
+  onClick,
+  isFavorite,
+  onToggleFavorite,
+}: {
+  landlord: Landlord;
+  onClick: () => void;
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
+}) {
   const preview = landlord.reviews[0]?.text ?? "";
   return (
     <motion.div
@@ -211,12 +311,26 @@ function LandlordCard({ landlord, onClick }: { landlord: Landlord; onClick: () =
             {landlord.university}
           </p>
         </div>
-        <div className={`shrink-0 border rounded-lg px-3 py-1.5 text-center ${ratingBg(landlord.avgRating)}`}>
-          <div className={`font-['Lora'] font-bold text-xl leading-none ${ratingColor(landlord.avgRating)}`}>
-            {landlord.avgRating.toFixed(1)}
-          </div>
-          <div className={`text-[10px] font-medium mt-0.5 ${ratingColor(landlord.avgRating)}`}>
-            {ratingLabel(landlord.avgRating)}
+        <div className="flex items-start gap-2 shrink-0">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleFavorite();
+            }}
+            className={`p-1.5 rounded-lg border transition-colors ${isFavorite ? "border-rose-300 bg-rose-50 text-rose-500" : "border-border text-muted-foreground hover:text-rose-500 hover:border-rose-300"}`}
+            aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+            title={isFavorite ? "Remove favorite" : "Favorite"}
+          >
+            <Heart size={14} className={isFavorite ? "fill-rose-500" : ""} />
+          </button>
+          <div className={`border rounded-lg px-3 py-1.5 text-center ${ratingBg(landlord.avgRating)}`}>
+            <div className={`font-['Lora'] font-bold text-xl leading-none ${ratingColor(landlord.avgRating)}`}>
+              {landlord.avgRating.toFixed(1)}
+            </div>
+            <div className={`text-[10px] font-medium mt-0.5 ${ratingColor(landlord.avgRating)}`}>
+              {ratingLabel(landlord.avgRating)}
+            </div>
           </div>
         </div>
       </div>
@@ -250,13 +364,51 @@ function LandlordCard({ landlord, onClick }: { landlord: Landlord; onClick: () =
 
 // ── Landlord Profile Modal ───────────────────────────────────────────────────
 
-function ProfileModal({ landlord, onClose }: { landlord: Landlord; onClose: () => void }) {
+function ProfileModal({
+  landlord,
+  onClose,
+  isFavorite,
+  onToggleFavorite,
+  onEditReview,
+}: {
+  landlord: Landlord;
+  onClose: () => void;
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
+  onEditReview: (review: Review) => void;
+}) {
   const [helpfulVotes, setHelpfulVotes] = useState<Record<string, boolean>>({});
+  const [bioOpen, setBioOpen] = useState(true);
 
   const ratingDist = useMemo(() => {
     const dist: Record<number, number> = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
     landlord.reviews.forEach((r) => { dist[r.rating] = (dist[r.rating] ?? 0) + 1; });
     return dist;
+  }, [landlord]);
+
+  const mostCommonComments = useMemo(() => {
+    const themes = [
+      { label: "Maintenance responsiveness", keywords: ["maintenance", "repair", "fixed", "respond"] },
+      { label: "Deposit fairness", keywords: ["deposit", "deduction", "refund"] },
+      { label: "Cleanliness", keywords: ["clean", "spotless", "mold", "pest", "cockroach"] },
+      { label: "Communication", keywords: ["communicat", "reach", "response", "notice"] },
+      { label: "Lease transparency", keywords: ["lease", "hidden", "fee", "clause", "transparent"] },
+      { label: "Location convenience", keywords: ["location", "campus", "walk", "central"] },
+    ];
+
+    const counts = themes
+      .map((theme) => {
+        const count = landlord.reviews.reduce((sum, review) => {
+          const reviewText = review.text.toLowerCase();
+          return theme.keywords.some((keyword) => reviewText.includes(keyword)) ? sum + 1 : sum;
+        }, 0);
+        return { label: theme.label, count };
+      })
+      .filter((theme) => theme.count > 0)
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 4);
+
+    return counts;
   }, [landlord]);
 
   return (
@@ -281,16 +433,92 @@ function ProfileModal({ landlord, onClose }: { landlord: Landlord; onClose: () =
               {landlord.address}
             </p>
           </div>
-          <button
-            onClick={onClose}
-            className="shrink-0 p-1.5 rounded-lg hover:bg-muted transition-colors"
-          >
-            <X size={18} />
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={onToggleFavorite}
+              className={`p-1.5 rounded-lg border transition-colors ${isFavorite ? "border-rose-300 bg-rose-50 text-rose-500" : "border-border text-muted-foreground hover:text-rose-500 hover:border-rose-300"}`}
+              aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+              title={isFavorite ? "Remove favorite" : "Favorite"}
+            >
+              <Heart size={16} className={isFavorite ? "fill-rose-500" : ""} />
+            </button>
+            <button
+              onClick={onClose}
+              className="p-1.5 rounded-lg hover:bg-muted transition-colors"
+            >
+              <X size={18} />
+            </button>
+          </div>
         </div>
 
         <div className="p-6 space-y-6">
-          {/* Rating summary */}
+          {/* Profile summary */}
+          <section className="border border-border rounded-xl overflow-hidden bg-secondary/30">
+            <button
+              type="button"
+              onClick={() => setBioOpen((v) => !v)}
+              className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-muted/60 transition-colors"
+            >
+              <span className="font-['Lora'] font-semibold text-base text-foreground">Landlord Profile</span>
+              <ChevronDown size={16} className={`transition-transform ${bioOpen ? "rotate-180" : ""}`} />
+            </button>
+
+            <AnimatePresence initial={false}>
+              {bioOpen && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="px-4 pb-4"
+                >
+                  <div className="flex items-start gap-4 pt-2">
+                    <img
+                      src={landlord.photoUrl}
+                      alt={`${landlord.name} profile`}
+                      className="w-16 h-16 rounded-xl object-cover border border-border"
+                    />
+                    <div className="min-w-0 flex-1 space-y-1.5">
+                      <p className="text-sm text-foreground/80 leading-relaxed">{landlord.bio}</p>
+                      <p className="text-xs text-muted-foreground">Contact: {landlord.contactEmail} · {landlord.contactPhone}</p>
+                      <p className="text-xs text-muted-foreground">Reviewed properties: {landlord.reviewedProperties}</p>
+                      <p className="text-xs text-muted-foreground">Property locations: {landlord.propertyLocations.join(", ")}</p>
+                      <p className="text-xs text-muted-foreground">Primary job: {landlord.primaryJob ? "Yes" : "No"}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </section>
+
+          {/* Property information */}
+          <div>
+            <h3 className="font-['Lora'] font-semibold text-base mb-3">Property Information</h3>
+            <div className="space-y-3">
+              {landlord.properties.map((property) => (
+                <div key={property.id} className="border border-border rounded-xl p-4 bg-secondary/30">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="font-semibold text-sm text-foreground">{property.title}</p>
+                      <p className="text-xs text-muted-foreground mt-1">{property.beds} bed · {property.baths} bath · ${property.rent.toLocaleString()}/mo</p>
+                    </div>
+                  </div>
+                  <div className="mt-3">
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Ground Rules</p>
+                    <ul className="mt-1.5 space-y-1">
+                      {property.groundRules.map((rule) => (
+                        <li key={rule} className="text-xs text-foreground/80">• {rule}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Average landlord rating */}
+          <div>
+            <h3 className="font-['Lora'] font-semibold text-base mb-3">Average Landlord Rating</h3>
           <div className="flex gap-6 items-center">
             <div className="text-center">
               <div className={`font-['Lora'] font-bold text-5xl ${ratingColor(landlord.avgRating)}`}>
@@ -319,6 +547,7 @@ function ProfileModal({ landlord, onClose }: { landlord: Landlord; onClose: () =
               })}
             </div>
           </div>
+          </div>
 
           {/* Tags */}
           <div className="flex flex-wrap gap-2">
@@ -327,6 +556,23 @@ function ProfileModal({ landlord, onClose }: { landlord: Landlord; onClose: () =
                 {t}
               </span>
             ))}
+          </div>
+
+          {/* Most common comments */}
+          <div>
+            <h3 className="font-['Lora'] font-semibold text-base mb-3">Most Common Comments</h3>
+            {mostCommonComments.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {mostCommonComments.map((theme) => (
+                  <div key={theme.label} className="border border-border rounded-lg px-3 py-2 bg-secondary/20 flex items-center justify-between gap-2">
+                    <span className="text-sm text-foreground/85">{theme.label}</span>
+                    <span className="text-xs font-semibold text-muted-foreground">{theme.count} review{theme.count === 1 ? "" : "s"}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">Not enough review text yet to identify common themes.</p>
+            )}
           </div>
 
           {/* Reviews */}
@@ -348,13 +594,25 @@ function ProfileModal({ landlord, onClose }: { landlord: Landlord; onClose: () =
                   </div>
                   <StarRow rating={review.rating} size={12} />
                   <p className="text-sm text-foreground/80 mt-2 leading-relaxed">{review.text}</p>
-                  <button
-                    onClick={() => setHelpfulVotes((v) => ({ ...v, [review.id]: !v[review.id] }))}
-                    className={`flex items-center gap-1.5 text-xs mt-3 rounded-full px-3 py-1 border transition-colors ${helpfulVotes[review.id] ? "bg-primary/10 border-primary/30 text-primary" : "border-border text-muted-foreground hover:border-primary/30 hover:text-primary"}`}
-                  >
-                    <ThumbsUp size={11} />
-                    Helpful · {review.helpful + (helpfulVotes[review.id] ? 1 : 0)}
-                  </button>
+                  <div className="flex items-center justify-between gap-3 mt-3">
+                    <button
+                      onClick={() => setHelpfulVotes((v) => ({ ...v, [review.id]: !v[review.id] }))}
+                      className={`flex items-center gap-1.5 text-xs rounded-full px-3 py-1 border transition-colors ${helpfulVotes[review.id] ? "bg-primary/10 border-primary/30 text-primary" : "border-border text-muted-foreground hover:border-primary/30 hover:text-primary"}`}
+                    >
+                      <ThumbsUp size={11} />
+                      Helpful · {review.helpful + (helpfulVotes[review.id] ? 1 : 0)}
+                    </button>
+                    {review.author === "You" && (
+                      <button
+                        type="button"
+                        onClick={() => onEditReview(review)}
+                        className="text-xs rounded-full px-3 py-1 border border-border text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors inline-flex items-center gap-1.5"
+                      >
+                        <Pencil size={11} />
+                        Edit your review
+                      </button>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
@@ -376,24 +634,48 @@ interface ReviewFormData {
   reviewText: string;
 }
 
-function WriteReviewModal({ onClose, prefillLandlord }: { onClose: () => void; prefillLandlord?: Landlord }) {
+interface EditableReviewContext {
+  landlordId: string;
+  review: Review;
+}
+
+interface SurveyState {
+  rentBudget: "any" | "under_1000" | "1000_1500" | "1500_plus";
+  apartmentPriority: "any" | "quiet" | "modern" | "walkable";
+  landlordPriority: "any" | "responsive" | "fair" | "low_cost";
+}
+
+function WriteReviewModal({
+  onClose,
+  landlords,
+  prefillLandlord,
+  editingReview,
+  onSubmitReview,
+}: {
+  onClose: () => void;
+  landlords: Landlord[];
+  prefillLandlord?: Landlord;
+  editingReview?: EditableReviewContext | null;
+  onSubmitReview: (data: ReviewFormData, editingReviewId?: string) => void;
+}) {
+  const isEditing = Boolean(editingReview);
   const [form, setForm] = useState<ReviewFormData>({
     landlordName: prefillLandlord?.name ?? "",
-    landlordId: prefillLandlord?.id ?? "",
-    school: prefillLandlord?.university ?? "",
+    landlordId: prefillLandlord?.id ?? editingReview?.landlordId ?? "",
+    school: prefillLandlord?.university ?? editingReview?.review.school ?? "",
     address: prefillLandlord?.address ?? "",
-    rating: 0,
-    reviewText: "",
+    rating: editingReview?.review.rating ?? 0,
+    reviewText: editingReview?.review.text ?? "",
   });
-  const [submitted, setSubmitted] = useState(false);
-  const [addingNew, setAddingNew] = useState(!prefillLandlord);
+  const [addingNew, setAddingNew] = useState(!prefillLandlord && !editingReview);
 
   const valid = form.rating > 0 && form.reviewText.trim().length > 20 && form.landlordName.trim().length > 0;
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!valid) return;
-    setSubmitted(true);
+    onSubmitReview(form, editingReview?.review.id);
+    onClose();
   }
 
   return (
@@ -410,25 +692,13 @@ function WriteReviewModal({ onClose, prefillLandlord }: { onClose: () => void; p
         onClick={(e) => e.stopPropagation()}
       >
         <div className="sticky top-0 bg-card border-b border-border px-6 py-4 flex items-center justify-between z-10">
-          <h2 className="font-['Lora'] font-bold text-lg">Write a Review</h2>
+          <h2 className="font-['Lora'] font-bold text-lg">{isEditing ? "Edit Your Review" : "Write a Review"}</h2>
           <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-muted transition-colors">
             <X size={18} />
           </button>
         </div>
 
-        {submitted ? (
-          <div className="flex flex-col items-center justify-center py-16 px-6 text-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center">
-              <Star size={32} className="fill-emerald-500 text-emerald-500" />
-            </div>
-            <h3 className="font-['Lora'] font-bold text-xl">Review Submitted!</h3>
-            <p className="text-muted-foreground text-sm">Thanks for helping fellow students make informed decisions. Your review will be visible after a quick verification check.</p>
-            <button onClick={onClose} className="mt-2 bg-primary text-primary-foreground rounded-xl px-6 py-2.5 font-semibold text-sm hover:bg-primary/90 transition-colors">
-              Done
-            </button>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="p-6 space-y-5">
+        <form onSubmit={handleSubmit} className="p-6 space-y-5">
             {/* Landlord selection */}
             <div>
               <label className="block text-sm font-semibold mb-2">Landlord / Property Manager</label>
@@ -437,24 +707,27 @@ function WriteReviewModal({ onClose, prefillLandlord }: { onClose: () => void; p
                   <select
                     value={form.landlordId}
                     onChange={(e) => {
-                      const l = LANDLORDS.find((x) => x.id === e.target.value);
+                      const l = landlords.find((x) => x.id === e.target.value);
                       if (l) setForm((f) => ({ ...f, landlordId: l.id, landlordName: l.name, school: l.university, address: l.address }));
                     }}
                     className="w-full bg-input-background border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                    disabled={isEditing}
                   >
                     <option value="">Select a landlord…</option>
-                    {LANDLORDS.map((l) => (
+                    {landlords.map((l) => (
                       <option key={l.id} value={l.id}>{l.name}</option>
                     ))}
                   </select>
-                  <button
-                    type="button"
-                    onClick={() => setAddingNew(true)}
-                    className="mt-2 text-xs text-primary hover:underline flex items-center gap-1"
-                  >
-                    <Plus size={12} />
-                    Landlord not listed? Add them
-                  </button>
+                  {!isEditing && (
+                    <button
+                      type="button"
+                      onClick={() => setAddingNew(true)}
+                      className="mt-2 text-xs text-primary hover:underline flex items-center gap-1"
+                    >
+                      <Plus size={12} />
+                      Landlord not listed? Add them
+                    </button>
+                  )}
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -541,10 +814,9 @@ function WriteReviewModal({ onClose, prefillLandlord }: { onClose: () => void; p
               disabled={!valid}
               className="w-full bg-primary text-primary-foreground rounded-xl py-3 font-semibold text-sm hover:bg-primary/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              Submit Review
+              {isEditing ? "Save Changes" : "Submit Review"}
             </button>
           </form>
-        )}
       </motion.div>
     </div>
   );
@@ -555,13 +827,28 @@ function WriteReviewModal({ onClose, prefillLandlord }: { onClose: () => void; p
 const PAGE_SIZE = 4;
 
 export default function App() {
-  const [query, setQuery] = useState("");
+  const [activeView, setActiveView] = useState<"home" | "discover">("home");
+  const [searchInput, setSearchInput] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedSchool, setSelectedSchool] = useState("All Schools");
-  const [sortBy, setSortBy] = useState<"newest" | "highest" | "lowest" | "most_reviewed">("most_reviewed");
+  const [areaQuery, setAreaQuery] = useState("Ann Arbor");
+  const [discoverQuery, setDiscoverQuery] = useState("");
+  const [landlords, setLandlords] = useState<Landlord[]>(LANDLORDS);
+  const [sortBy, setSortBy] = useState<"highest" | "lowest" | "most_reviewed">("most_reviewed");
   const [ratingFilter, setRatingFilter] = useState<"all" | "good" | "avg" | "poor">("all");
   const [page, setPage] = useState(1);
-  const [profileOpen, setProfileOpen] = useState<Landlord | null>(null);
+  const [profileOpenId, setProfileOpenId] = useState<string | null>(null);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [reviewPrefillLandlordId, setReviewPrefillLandlordId] = useState<string | null>(null);
+  const [editingReview, setEditingReview] = useState<EditableReviewContext | null>(null);
+  const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
+  const [helpOpen, setHelpOpen] = useState(false);
+  const [surveyApplied, setSurveyApplied] = useState(false);
+  const [survey, setSurvey] = useState<SurveyState>({
+    rentBudget: "any",
+    apartmentPriority: "any",
+    landlordPriority: "any",
+  });
   const [filterOpen, setFilterOpen] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
 
@@ -576,38 +863,205 @@ export default function App() {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
+  const profileOpen = useMemo(() => {
+    if (!profileOpenId) return null;
+    return landlords.find((l) => l.id === profileOpenId) ?? null;
+  }, [profileOpenId, landlords]);
+
+  const preferenceScore = (landlord: Landlord) => {
+    if (!surveyApplied) return 0;
+    let score = 0;
+    const tags = landlord.tags.map((t) => t.toLowerCase());
+    const reviewBlob = landlord.reviews.map((r) => r.text.toLowerCase()).join(" ");
+
+    if (survey.landlordPriority === "responsive" && tags.some((t) => t.includes("responsive"))) score += 3;
+    if (survey.landlordPriority === "fair" && tags.some((t) => t.includes("fair") || t.includes("value"))) score += 3;
+    if (survey.landlordPriority === "low_cost" && tags.some((t) => t.includes("value") || t.includes("pricing"))) score += 3;
+
+    if (survey.apartmentPriority === "modern" && tags.some((t) => t.includes("modern"))) score += 2;
+    if (survey.apartmentPriority === "walkable" && tags.some((t) => t.includes("central") || t.includes("location"))) score += 2;
+    if (survey.apartmentPriority === "quiet" && reviewBlob.includes("quiet")) score += 2;
+
+    if (survey.rentBudget === "under_1000" && tags.some((t) => t.includes("value") || t.includes("pricing"))) score += 1;
+    if (survey.rentBudget === "1000_1500" && landlord.avgRating >= 3) score += 1;
+    if (survey.rentBudget === "1500_plus" && landlord.avgRating >= 4) score += 1;
+
+    return score;
+  };
+
   const filtered = useMemo(() => {
-    let list = [...LANDLORDS];
+    let list = [...landlords];
     if (selectedSchool !== "All Schools") list = list.filter((l) => l.university === selectedSchool);
-    if (query.trim()) {
-      const q = query.toLowerCase();
-      list = list.filter((l) =>
-        l.name.toLowerCase().includes(q) ||
-        l.address.toLowerCase().includes(q) ||
-        l.university.toLowerCase().includes(q)
-      );
+    if (searchTerm.trim()) {
+      list = list.filter((l) => matchesSearch(`${l.name} ${l.address} ${l.university}`, searchTerm));
     }
     if (ratingFilter === "good") list = list.filter((l) => l.avgRating >= 4);
     if (ratingFilter === "avg") list = list.filter((l) => l.avgRating >= 3 && l.avgRating < 4);
     if (ratingFilter === "poor") list = list.filter((l) => l.avgRating < 3);
+
+    if (surveyApplied) {
+      list.sort((a, b) => preferenceScore(b) - preferenceScore(a));
+    }
+
     if (sortBy === "highest") list.sort((a, b) => b.avgRating - a.avgRating);
     if (sortBy === "lowest") list.sort((a, b) => a.avgRating - b.avgRating);
     if (sortBy === "most_reviewed") list.sort((a, b) => b.reviewCount - a.reviewCount);
     return list;
-  }, [query, selectedSchool, sortBy, ratingFilter]);
+  }, [landlords, searchTerm, selectedSchool, sortBy, ratingFilter, surveyApplied, survey]);
+
+  const recommendedLandlords = useMemo(() => {
+    return [...landlords]
+      .sort((a, b) => {
+        const preferenceDelta = preferenceScore(b) - preferenceScore(a);
+        if (preferenceDelta !== 0) return preferenceDelta;
+        return b.avgRating - a.avgRating;
+      })
+      .slice(0, 8);
+  }, [landlords, surveyApplied, survey]);
+
+  const discoverLandlords = useMemo(() => {
+    const area = areaQuery.trim().toLowerCase();
+    const q = discoverQuery.trim();
+    let list = [...landlords];
+
+    if (area) {
+      list = list.filter((l) => `${l.address} ${l.university}`.toLowerCase().includes(area));
+    }
+
+    if (q) {
+      list = list.filter((l) => matchesSearch(`${l.name} ${l.address} ${l.university}`, q));
+    }
+
+    return list.sort((a, b) => b.avgRating - a.avgRating);
+  }, [landlords, areaQuery, discoverQuery]);
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   function handleSearch() {
+    setSearchTerm(searchInput);
     setPage(1);
   }
 
+  function toggleFavorite(landlordId: string) {
+    setFavoriteIds((prev) => (prev.includes(landlordId) ? prev.filter((id) => id !== landlordId) : [...prev, landlordId]));
+  }
+
+  function handleOpenNewReview(prefillLandlordId?: string) {
+    setEditingReview(null);
+    setReviewPrefillLandlordId(prefillLandlordId ?? null);
+    setReviewModalOpen(true);
+  }
+
+  function handleSubmitReview(form: ReviewFormData, editingReviewId?: string) {
+    let resolvedLandlordId = form.landlordId;
+
+    setLandlords((prev) => {
+      let working = [...prev];
+
+      if (!resolvedLandlordId) {
+        resolvedLandlordId = `l-${Date.now()}`;
+        const safeName = form.landlordName.trim() || "New Landlord";
+        working = [
+          {
+            id: resolvedLandlordId,
+            name: safeName,
+            university: form.school,
+            address: form.address,
+            photoUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(safeName)}&background=EDE7DC&color=2C1810&size=256`,
+            bio: "New landlord profile created from student review submissions.",
+            contactEmail: "not-provided@example.com",
+            contactPhone: "Not provided",
+            reviewedProperties: 1,
+            propertyLocations: [form.address || "Location not provided"],
+            properties: [
+              {
+                id: `p-${Date.now()}`,
+                title: "Submitted Property",
+                beds: 1,
+                baths: 1,
+                rent: 1200,
+                groundRules: ["Ground rules not provided yet"],
+              },
+            ],
+            primaryJob: true,
+            avgRating: form.rating,
+            reviewCount: 0,
+            reviews: [],
+            tags: ["New Listing"],
+          },
+          ...working,
+        ];
+      }
+
+      return working.map((landlord) => {
+        if (landlord.id !== resolvedLandlordId) return landlord;
+
+        if (editingReviewId) {
+          const existing = landlord.reviews.find((r) => r.id === editingReviewId);
+          if (!existing) return landlord;
+          const updatedReviews = landlord.reviews.map((r) =>
+            r.id === editingReviewId
+              ? { ...r, rating: form.rating, text: form.reviewText.trim(), school: form.school }
+              : r,
+          );
+          const total = landlord.avgRating * landlord.reviewCount - existing.rating + form.rating;
+          const adjustedAvg = landlord.reviewCount > 0 ? total / landlord.reviewCount : landlord.avgRating;
+
+          return {
+            ...landlord,
+            avgRating: Number(adjustedAvg.toFixed(1)),
+            address: form.address || landlord.address,
+            reviews: updatedReviews,
+          };
+        }
+
+        const now = new Date();
+        const newReview: Review = {
+          id: `r-${Date.now()}`,
+          author: "You",
+          school: form.school,
+          date: now.toLocaleString("en-US", { month: "short", year: "numeric" }),
+          rating: form.rating,
+          text: form.reviewText.trim(),
+          helpful: 0,
+        };
+
+        const newCount = landlord.reviewCount + 1;
+        const newAverage = (landlord.avgRating * landlord.reviewCount + form.rating) / newCount;
+
+        return {
+          ...landlord,
+          avgRating: Number(newAverage.toFixed(1)),
+          reviewCount: newCount,
+          address: form.address || landlord.address,
+          reviews: [newReview, ...landlord.reviews],
+        };
+      });
+    });
+
+    if (resolvedLandlordId) {
+      setProfileOpenId(resolvedLandlordId);
+    }
+    setReviewModalOpen(false);
+    setEditingReview(null);
+  }
+
+  function applySurveyPreferences() {
+    setSurveyApplied(true);
+    setPage(1);
+  }
+
+  function clearSurveyPreferences() {
+    setSurvey({ rentBudget: "any", apartmentPriority: "any", landlordPriority: "any" });
+    setSurveyApplied(false);
+  }
+
   const stats = useMemo(() => ({
-    landlords: LANDLORDS.length,
-    reviews: LANDLORDS.reduce((s, l) => s + l.reviewCount, 0),
-    schools: new Set(LANDLORDS.map((l) => l.university)).size,
-  }), []);
+    landlords: landlords.length,
+    reviews: landlords.reduce((s, l) => s + l.reviewCount, 0),
+    schools: new Set(landlords.map((l) => l.university)).size,
+  }), [landlords]);
 
   return (
     <div className="min-h-screen bg-background font-['Inter']">
@@ -623,23 +1077,45 @@ export default function App() {
             </span>
           </a>
 
-          <nav className="hidden sm:flex items-center gap-6 text-sm text-muted-foreground font-medium">
-            <a href="#search" className="hover:text-foreground transition-colors">Search</a>
-            <a href="#" className="hover:text-foreground transition-colors">Browse Schools</a>
-            <a href="#" className="hover:text-foreground transition-colors">How It Works</a>
+          <nav className="hidden sm:flex items-center gap-2 text-sm font-medium">
+            <button
+              type="button"
+              onClick={() => setActiveView("home")}
+              className={`rounded-lg px-3 py-1.5 transition-colors ${activeView === "home" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground hover:bg-muted"}`}
+            >
+              Home
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveView("discover")}
+              className={`rounded-lg px-3 py-1.5 transition-colors ${activeView === "discover" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground hover:bg-muted"}`}
+            >
+              Discover
+            </button>
           </nav>
 
-          <button
-            onClick={() => setReviewModalOpen(true)}
-            className="shrink-0 flex items-center gap-1.5 bg-primary text-primary-foreground rounded-xl px-4 py-2 text-sm font-semibold hover:bg-primary/90 transition-colors"
-          >
-            <Plus size={15} />
-            <span className="hidden sm:inline">Write a Review</span>
-            <span className="sm:hidden">Review</span>
-          </button>
+          <div className="shrink-0 flex items-center gap-2">
+            <button
+              onClick={() => setHelpOpen(true)}
+              className="flex items-center gap-1.5 border border-border text-muted-foreground rounded-xl px-3 py-2 text-sm font-semibold hover:text-foreground hover:border-primary/40 transition-colors"
+            >
+              <CircleHelp size={14} />
+              <span className="hidden sm:inline">Help</span>
+            </button>
+            <button
+              onClick={() => handleOpenNewReview()}
+              className="flex items-center gap-1.5 bg-primary text-primary-foreground rounded-xl px-4 py-2 text-sm font-semibold hover:bg-primary/90 transition-colors"
+            >
+              <Plus size={15} />
+              <span className="hidden sm:inline">Write a Review</span>
+              <span className="sm:hidden">Review</span>
+            </button>
+          </div>
         </div>
       </header>
 
+      {activeView === "home" && (
+        <>
       {/* ── Hero ── */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#2C1810] to-[#1A1209] pt-16 pb-20 px-4">
         <div className="absolute inset-0 opacity-[0.04]" style={{
@@ -683,8 +1159,8 @@ export default function App() {
                 <input
                   type="text"
                   placeholder="Search landlord name or address…"
-                  value={query}
-                  onChange={(e) => { setQuery(e.target.value); setPage(1); }}
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                   className="w-full bg-input-background border border-border rounded-xl pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring placeholder:text-muted-foreground"
                 />
@@ -696,6 +1172,64 @@ export default function App() {
               >
                 Search
                 <ArrowRight size={15} />
+              </button>
+            </div>
+          </div>
+
+          <div className="mt-5 bg-white/10 border border-white/20 rounded-2xl p-4 text-left">
+            <div className="flex items-center justify-between gap-3 mb-3">
+              <h3 className="font-['Lora'] font-semibold text-white text-lg">Quick Housing Preferences</h3>
+              {surveyApplied && (
+                <span className="text-xs text-emerald-300 font-medium">Applied to recommendations</span>
+              )}
+            </div>
+            <p className="text-white/70 text-sm mb-4">Tell us what matters for your apartment and landlord. We will rank results around your preferences.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <select
+                value={survey.rentBudget}
+                onChange={(e) => setSurvey((prev) => ({ ...prev, rentBudget: e.target.value as SurveyState["rentBudget"] }))}
+                className="bg-white/95 rounded-xl px-3 py-2 text-sm"
+              >
+                <option value="any">Budget: Any</option>
+                <option value="under_1000">Budget: Under $1,000</option>
+                <option value="1000_1500">Budget: $1,000-$1,500</option>
+                <option value="1500_plus">Budget: $1,500+</option>
+              </select>
+              <select
+                value={survey.apartmentPriority}
+                onChange={(e) => setSurvey((prev) => ({ ...prev, apartmentPriority: e.target.value as SurveyState["apartmentPriority"] }))}
+                className="bg-white/95 rounded-xl px-3 py-2 text-sm"
+              >
+                <option value="any">Apartment: Any</option>
+                <option value="quiet">Apartment: Quiet</option>
+                <option value="modern">Apartment: Modern Unit</option>
+                <option value="walkable">Apartment: Walkable Location</option>
+              </select>
+              <select
+                value={survey.landlordPriority}
+                onChange={(e) => setSurvey((prev) => ({ ...prev, landlordPriority: e.target.value as SurveyState["landlordPriority"] }))}
+                className="bg-white/95 rounded-xl px-3 py-2 text-sm"
+              >
+                <option value="any">Landlord: Any</option>
+                <option value="responsive">Landlord: Fast Repairs</option>
+                <option value="fair">Landlord: Fair Policies</option>
+                <option value="low_cost">Landlord: Better Value</option>
+              </select>
+            </div>
+            <div className="mt-3 flex items-center gap-2">
+              <button
+                type="button"
+                onClick={applySurveyPreferences}
+                className="bg-white text-[#1A1209] rounded-xl px-4 py-2 text-sm font-semibold hover:bg-white/90 transition-colors"
+              >
+                Apply Preferences
+              </button>
+              <button
+                type="button"
+                onClick={clearSurveyPreferences}
+                className="border border-white/35 text-white rounded-xl px-4 py-2 text-sm font-semibold hover:border-white/55 transition-colors"
+              >
+                Reset
               </button>
             </div>
           </div>
@@ -719,6 +1253,39 @@ export default function App() {
         </div>
       </section>
 
+      {/* ── Recommended Feed ── */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 mt-7">
+        <div className="flex items-center justify-between gap-3 mb-3">
+          <h2 className="font-['Lora'] font-bold text-xl text-foreground">Recommended Landlords</h2>
+          <span className="text-xs text-muted-foreground">Swipe sideways</span>
+        </div>
+        <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory">
+          {recommendedLandlords.map((landlord) => (
+            <button
+              key={`recommended-${landlord.id}`}
+              type="button"
+              onClick={() => setProfileOpenId(landlord.id)}
+              className="min-w-[260px] max-w-[260px] snap-start text-left rounded-xl border border-border bg-card p-4 hover:border-primary/40 transition-colors"
+            >
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <p className="font-['Lora'] font-semibold text-foreground line-clamp-1">{landlord.name}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{landlord.university}</p>
+                </div>
+                <div className={`rounded-lg border px-2 py-1 ${ratingBg(landlord.avgRating)}`}>
+                  <span className={`font-bold text-sm ${ratingColor(landlord.avgRating)}`}>{landlord.avgRating.toFixed(1)}</span>
+                </div>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2 line-clamp-1">{landlord.address}</p>
+              <div className="mt-3 flex items-center justify-between">
+                <StarRow rating={landlord.avgRating} size={12} />
+                <span className="text-xs text-muted-foreground">{landlord.reviewCount} reviews</span>
+              </div>
+            </button>
+          ))}
+        </div>
+      </section>
+
       {/* ── Results ── */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
         {/* Filter bar */}
@@ -729,7 +1296,7 @@ export default function App() {
             </h2>
             <p className="text-sm text-muted-foreground mt-0.5">
               {filtered.length} {filtered.length === 1 ? "result" : "results"}
-              {query && <span> for "<em>{query}</em>"</span>}
+              {searchTerm && <span> for "<em>{searchTerm}</em>"</span>}
             </p>
           </div>
 
@@ -790,7 +1357,13 @@ export default function App() {
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {paginated.map((l) => (
-                <LandlordCard key={l.id} landlord={l} onClick={() => setProfileOpen(l)} />
+                <LandlordCard
+                  key={l.id}
+                  landlord={l}
+                  onClick={() => setProfileOpenId(l.id)}
+                  isFavorite={favoriteIds.includes(l.id)}
+                  onToggleFavorite={() => toggleFavorite(l.id)}
+                />
               ))}
             </div>
 
@@ -835,10 +1408,10 @@ export default function App() {
             </div>
             <h3 className="font-['Lora'] font-bold text-xl mb-2">No results found</h3>
             <p className="text-muted-foreground text-sm max-w-sm mx-auto mb-6">
-              We don't have reviews for that landlord yet. Be the first student to share your experience and help others.
+              We're still working on it. We don't have matches yet, but new listings and reviews are being added.
             </p>
             <button
-              onClick={() => setReviewModalOpen(true)}
+              onClick={() => handleOpenNewReview()}
               className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-xl px-6 py-3 font-semibold text-sm hover:bg-primary/90 transition-colors"
             >
               <Plus size={16} />
@@ -872,6 +1445,63 @@ export default function App() {
           </div>
         </div>
       </section>
+      </>
+      )}
+
+      {activeView === "discover" && (
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
+          <div className="bg-card border border-border rounded-2xl p-5 sm:p-6 mb-6">
+            <h1 className="font-['Lora'] font-bold text-2xl text-foreground">Discover Landlords In Your Area</h1>
+            <p className="text-sm text-muted-foreground mt-1">Landlords are ranked from highest to lowest rating.</p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
+              <div>
+                <label className="text-xs font-semibold text-muted-foreground">Your Area</label>
+                <input
+                  type="text"
+                  value={areaQuery}
+                  onChange={(e) => setAreaQuery(e.target.value)}
+                  placeholder="City, campus, or neighborhood"
+                  className="mt-1 w-full bg-input-background border border-border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                />
+              </div>
+              <div className="sm:col-span-2">
+                <label className="text-xs font-semibold text-muted-foreground">Search by Name or Location</label>
+                <div className="relative mt-1">
+                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                  <input
+                    type="text"
+                    value={discoverQuery}
+                    onChange={(e) => setDiscoverQuery(e.target.value)}
+                    placeholder="Search landlords, street, city, or school"
+                    className="w-full bg-input-background border border-border rounded-xl pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {discoverLandlords.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {discoverLandlords.map((l) => (
+                <LandlordCard
+                  key={`discover-${l.id}`}
+                  landlord={l}
+                  onClick={() => setProfileOpenId(l.id)}
+                  isFavorite={favoriteIds.includes(l.id)}
+                  onToggleFavorite={() => toggleFavorite(l.id)}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16 border border-border rounded-2xl bg-card">
+              <MapPin size={24} className="text-muted-foreground mx-auto mb-3" />
+              <p className="font-medium text-foreground">We're still working on it for this area.</p>
+              <p className="text-sm text-muted-foreground mt-1">Try a nearby city/campus or a broader location search.</p>
+            </div>
+          )}
+        </section>
+      )}
 
       {/* ── Footer ── */}
       <footer className="bg-[#1A1209] py-8 px-4">
@@ -899,12 +1529,62 @@ export default function App() {
       {/* ── Modals ── */}
       <AnimatePresence>
         {profileOpen && (
-          <ProfileModal landlord={profileOpen} onClose={() => setProfileOpen(null)} />
+          <ProfileModal
+            landlord={profileOpen}
+            isFavorite={favoriteIds.includes(profileOpen.id)}
+            onToggleFavorite={() => toggleFavorite(profileOpen.id)}
+            onEditReview={(review) => {
+              setEditingReview({ landlordId: profileOpen.id, review });
+              setReviewPrefillLandlordId(profileOpen.id);
+              setReviewModalOpen(true);
+            }}
+            onClose={() => setProfileOpenId(null)}
+          />
         )}
       </AnimatePresence>
       <AnimatePresence>
         {reviewModalOpen && (
-          <WriteReviewModal onClose={() => setReviewModalOpen(false)} />
+          <WriteReviewModal
+            landlords={landlords}
+            prefillLandlord={landlords.find((l) => l.id === (editingReview?.landlordId ?? reviewPrefillLandlordId ?? ""))}
+            editingReview={editingReview}
+            onSubmitReview={handleSubmitReview}
+            onClose={() => {
+              setReviewModalOpen(false);
+              setEditingReview(null);
+            }}
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {helpOpen && (
+          <div
+            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/45 backdrop-blur-sm"
+            onClick={() => setHelpOpen(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 30 }}
+              transition={{ duration: 0.2 }}
+              className="bg-card w-full sm:max-w-xl rounded-t-2xl sm:rounded-2xl border border-border shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between border-b border-border px-6 py-4">
+                <h2 className="font-['Lora'] font-bold text-lg text-foreground">How to Use This Site</h2>
+                <button onClick={() => setHelpOpen(false)} className="p-1.5 rounded-lg hover:bg-muted transition-colors">
+                  <X size={18} />
+                </button>
+              </div>
+              <div className="px-6 py-5 space-y-4 text-sm text-foreground/80">
+                <p>Use Search to filter by school, name, or address and open any landlord card for full review details.</p>
+                <p>Tap the heart icon on cards or profile pages to save favorite landlords and compare options quickly.</p>
+                <p>Use Write a Review to submit your own experience. If your review author shows as You, you can edit it anytime from the landlord profile.</p>
+                <p>Fill out Quick Housing Preferences on the homepage to rank results by the apartment and landlord qualities you care about most.</p>
+              </div>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </div>
