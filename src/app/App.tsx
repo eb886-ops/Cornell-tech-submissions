@@ -46,6 +46,7 @@ interface Landlord {
 
 const SCHOOLS = [
   "All Schools",
+  "Cornell University",
   "University of Michigan",
   "Ohio State University",
   "Penn State",
@@ -120,10 +121,10 @@ const LANDLORDS: Landlord[] = [
     properties: [
       { id: "p4", title: "College Ave Classic", beds: 2, baths: 1, rent: 1950, groundRules: ["No smoking", "Tenant handles utilities", "12-month lease minimum"] },
     ],
-    primaryJob: true,
+    primaryJob: false,
     avgRating: 3.6,
     reviewCount: 38,
-    tags: ["Average", "Decent Location"],
+    tags: ["Decent Location", "Mom-and-Pop"],
     reviews: [
       { id: "r7", author: "Sofia M.", school: "Penn State", date: "Feb 2025", rating: 4, text: "Solid mid-tier landlord. Nothing exceptional but nothing terrible. Maintenance is usually done within a week, which isn't great but isn't terrible. Price is reasonable for the area.", helpful: 14 },
       { id: "r8", author: "Connor F.", school: "Penn State", date: "Nov 2024", rating: 3, text: "Decent enough. The apartment was older but functional. They were slow to respond during game weekends — seems like they disappear during football season.", helpful: 9 },
@@ -170,7 +171,7 @@ const LANDLORDS: Landlord[] = [
     primaryJob: false,
     avgRating: 1.8,
     reviewCount: 74,
-    tags: ["Avoid", "Mold Issues", "Unresponsive"],
+    tags: ["Mold Issues", "Unresponsive", "Mom-and-Pop"],
     reviews: [
       { id: "r12", author: "Brianna H.", school: "Indiana University", date: "Apr 2025", rating: 1, text: "Discovered black mold in the bathroom two months in. Reported it immediately. They sent someone to paint over it rather than remediate. I have asthma. This was a health hazard and they didn't care.", helpful: 112 },
       { id: "r13", author: "Sam G.", school: "Indiana University", date: "Jan 2025", rating: 2, text: "Pest issues from day one. Saw cockroaches multiple times. Their response was to hand me a can of Raid. I was paying $1,100/month. Never again.", helpful: 89 },
@@ -201,7 +202,257 @@ const LANDLORDS: Landlord[] = [
       { id: "r16", author: "Darius K.", school: "Purdue University", date: "Feb 2025", rating: 4, text: "Two-year tenant here. They've been consistently good. One maintenance issue took longer than expected but they communicated throughout. Would recommend.", helpful: 18 },
     ],
   },
+  {
+    id: "7",
+    name: "Cascadilla Family Rentals",
+    university: "Cornell University",
+    address: "109 Eddy St, Ithaca, NY 14850",
+    photoUrl: "https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&w=500&q=80",
+    bio: "A family-run landlord near Cornell focused on smaller buildings and direct communication with student tenants.",
+    contactEmail: "hello@cascadillafamilyrentals.com",
+    contactPhone: "(607) 555-0138",
+    reviewedProperties: 9,
+    propertyLocations: ["Collegetown", "Eddy Street", "Cascadilla Gorge"],
+    properties: [
+      { id: "p9", title: "Eddy Street Brownstone", beds: 3, baths: 2, rent: 3450, groundRules: ["No smoking", "No sublets without written approval", "Quiet hours after 11pm"] },
+      { id: "p10", title: "Cascadilla Terrace", beds: 2, baths: 1, rent: 2550, groundRules: ["Tenant handles electric", "Pet approval required"] },
+    ],
+    primaryJob: false,
+    avgRating: 4.4,
+    reviewCount: 22,
+    tags: ["Mom-and-Pop", "Responsive", "Fair Policies"],
+    reviews: [
+      { id: "r17", author: "Lena C.", school: "Cornell University", date: "Apr 2025", rating: 5, text: "Very easy to work with and actually reachable by phone. They fixed a leaking sink the same day and were upfront about every fee in the lease.", helpful: 17 },
+      { id: "r18", author: "Rahul S.", school: "Cornell University", date: "Dec 2024", rating: 4, text: "Good overall experience in Collegetown. Building is older, but they maintain it well and gave us clear move-out expectations.", helpful: 11 },
+    ],
+  },
+  {
+    id: "8",
+    name: "Twin Oaks Student Rentals",
+    university: "Michigan State",
+    address: "415 Albert Ave, East Lansing, MI 48823",
+    photoUrl: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=500&q=80",
+    bio: "Twin Oaks is a small owner-operated portfolio with duplexes and walk-up units near campus.",
+    contactEmail: "leasing@twinoaksrentals.com",
+    contactPhone: "(517) 555-0109",
+    reviewedProperties: 11,
+    propertyLocations: ["Grand River", "Albert Ave", "Oakland"],
+    properties: [
+      { id: "p11", title: "Albert Avenue Duplex", beds: 4, baths: 2, rent: 3000, groundRules: ["No indoor smoking", "Snow removal rota", "Parking permit required"] },
+    ],
+    primaryJob: false,
+    avgRating: 3.5,
+    reviewCount: 19,
+    tags: ["Mom-and-Pop", "Value", "Older Units"],
+    reviews: [
+      { id: "r19", author: "Maya T.", school: "Michigan State", date: "Mar 2025", rating: 4, text: "Not luxury, but decent value and close to campus. Owner is direct and usually responds within a day.", helpful: 9 },
+      { id: "r20", author: "Noah P.", school: "Michigan State", date: "Oct 2024", rating: 3, text: "Reasonable rent for East Lansing. Maintenance timing is mixed, but communication is better than most landlords I toured.", helpful: 7 },
+    ],
+  },
+  {
+    id: "9",
+    name: "Maple & Main Rentals",
+    university: "University of Minnesota",
+    address: "742 15th Ave SE, Minneapolis, MN 55414",
+    photoUrl: "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=500&q=80",
+    bio: "Small family-operated rentals around Dinkytown with straightforward lease communication.",
+    contactEmail: "info@maplemainrentals.com",
+    contactPhone: "(612) 555-0121",
+    reviewedProperties: 8,
+    propertyLocations: ["Dinkytown", "Como", "Marcy-Holmes"],
+    properties: [
+      { id: "p12", title: "15th Avenue Triplex", beds: 3, baths: 2, rent: 2950, groundRules: ["No smoking", "Shared yard quiet hours after 10pm", "Tenant snow shoveling rota"] },
+    ],
+    primaryJob: false,
+    avgRating: 4.1,
+    reviewCount: 17,
+    tags: ["Mom-and-Pop", "Responsive", "Clear Lease"],
+    reviews: [
+      { id: "r21", author: "Ivy L.", school: "University of Minnesota", date: "May 2025", rating: 4, text: "Owner replies quickly and explains lease items in plain language. Place is older but well maintained.", helpful: 8 },
+      { id: "r22", author: "Grant P.", school: "University of Minnesota", date: "Nov 2024", rating: 4, text: "Good value near campus and fewer surprise fees than other places we toured.", helpful: 6 },
+    ],
+  },
+  {
+    id: "10",
+    name: "Badger Block Housing",
+    university: "University of Wisconsin",
+    address: "211 N Frances St, Madison, WI 53703",
+    photoUrl: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=500&q=80",
+    bio: "A larger student-focused management company with buildings concentrated near State Street.",
+    contactEmail: "leasing@badgerblockhousing.com",
+    contactPhone: "(608) 555-0160",
+    reviewedProperties: 24,
+    propertyLocations: ["State Street", "Mifflin", "Langdon"],
+    properties: [
+      { id: "p13", title: "Frances Street Residences", beds: 2, baths: 2, rent: 2700, groundRules: ["No smoking", "Move-in checklist required", "Pet fee and screening"] },
+    ],
+    primaryJob: true,
+    avgRating: 3.2,
+    reviewCount: 35,
+    tags: ["Organized", "Mixed Maintenance", "Large Portfolio"],
+    reviews: [
+      { id: "r23", author: "Hannah Q.", school: "University of Wisconsin", date: "Feb 2025", rating: 3, text: "Leasing office is efficient but repair turnaround varies a lot by building.", helpful: 10 },
+      { id: "r24", author: "Peter J.", school: "University of Wisconsin", date: "Sep 2024", rating: 3, text: "Decent location and fair process, but communication can feel automated.", helpful: 7 },
+    ],
+  },
+  {
+    id: "11",
+    name: "Cayuga Porch Properties",
+    university: "Cornell University",
+    address: "223 Dryden Rd, Ithaca, NY 14850",
+    photoUrl: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=500&q=80",
+    bio: "Owner-run Cornell rentals with renovated interiors and careful tenant screening.",
+    contactEmail: "team@cayugaporch.com",
+    contactPhone: "(607) 555-0117",
+    reviewedProperties: 7,
+    propertyLocations: ["Collegetown", "Dryden Road"],
+    properties: [
+      { id: "p14", title: "Dryden Corner Apartments", beds: 2, baths: 1, rent: 2680, groundRules: ["No smoking", "No party hosting", "Co-signer required for undergrads"] },
+    ],
+    primaryJob: false,
+    avgRating: 4.6,
+    reviewCount: 14,
+    tags: ["Mom-and-Pop", "Clean", "Quiet Building"],
+    reviews: [
+      { id: "r25", author: "Sonia R.", school: "Cornell University", date: "Mar 2025", rating: 5, text: "Very responsive and the apartment was spotless at move-in. No hidden fees.", helpful: 12 },
+      { id: "r26", author: "Ben Y.", school: "Cornell University", date: "Oct 2024", rating: 4, text: "Slightly strict rules, but management is fair and transparent.", helpful: 6 },
+    ],
+  },
+  {
+    id: "12",
+    name: "Spartan City Living",
+    university: "Michigan State",
+    address: "920 E Grand River Ave, East Lansing, MI 48823",
+    photoUrl: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=500&q=80",
+    bio: "Regional property operator serving high-volume student leases around MSU.",
+    contactEmail: "hello@spartancityliving.com",
+    contactPhone: "(517) 555-0147",
+    reviewedProperties: 31,
+    propertyLocations: ["Grand River", "Bogue", "Harrison"],
+    properties: [
+      { id: "p15", title: "Grand River Towers", beds: 1, baths: 1, rent: 1620, groundRules: ["No smoking", "Move-out cleaning checklist", "Parking waitlist"] },
+    ],
+    primaryJob: true,
+    avgRating: 2.9,
+    reviewCount: 53,
+    tags: ["Busy Leasing Office", "Inconsistent Repairs"],
+    reviews: [
+      { id: "r27", author: "Miles A.", school: "Michigan State", date: "Jan 2025", rating: 3, text: "Good location, but maintenance can take too long when there are many requests.", helpful: 15 },
+      { id: "r28", author: "Erin D.", school: "Michigan State", date: "Aug 2024", rating: 2, text: "Process-heavy and not very flexible, though staff were polite.", helpful: 11 },
+    ],
+  },
+  {
+    id: "13",
+    name: "Buckeye Bungalow Rentals",
+    university: "Ohio State University",
+    address: "1484 Neil Ave, Columbus, OH 43201",
+    photoUrl: "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=500&q=80",
+    bio: "A local owner team focused on duplexes and small houses near OSU.",
+    contactEmail: "contact@buckeyebungalow.com",
+    contactPhone: "(614) 555-0104",
+    reviewedProperties: 10,
+    propertyLocations: ["University District", "Northwood", "Old North"],
+    properties: [
+      { id: "p16", title: "Neil Avenue Bungalow", beds: 4, baths: 2, rent: 2860, groundRules: ["No smoking", "Yard care split by tenants", "Guest parking permit"] },
+    ],
+    primaryJob: false,
+    avgRating: 4.0,
+    reviewCount: 16,
+    tags: ["Mom-and-Pop", "Fair Pricing", "Direct Communication"],
+    reviews: [
+      { id: "r29", author: "Julia M.", school: "Ohio State University", date: "Apr 2025", rating: 4, text: "Easy to reach and fair about security deposit deductions.", helpful: 9 },
+      { id: "r30", author: "Chris V.", school: "Ohio State University", date: "Sep 2024", rating: 4, text: "Older house, but they handled maintenance requests responsibly.", helpful: 6 },
+    ],
+  },
+  {
+    id: "14",
+    name: "Gopher Gate Properties",
+    university: "University of Minnesota",
+    address: "601 SE 8th St, Minneapolis, MN 55414",
+    photoUrl: "https://images.unsplash.com/photo-1549924231-f129b911e442?auto=format&fit=crop&w=500&q=80",
+    bio: "Student-focused management firm with modernized units and digital leasing tools.",
+    contactEmail: "support@gophergateproperties.com",
+    contactPhone: "(612) 555-0182",
+    reviewedProperties: 20,
+    propertyLocations: ["Marcy-Holmes", "Prospect Park"],
+    properties: [
+      { id: "p17", title: "8th Street Flats", beds: 2, baths: 2, rent: 2460, groundRules: ["No smoking", "Package locker policy", "Pet addendum required"] },
+    ],
+    primaryJob: true,
+    avgRating: 3.7,
+    reviewCount: 28,
+    tags: ["Modern Units", "Service Varies"],
+    reviews: [
+      { id: "r31", author: "Kara N.", school: "University of Minnesota", date: "Feb 2025", rating: 4, text: "Nice unit and easy online payments. Maintenance was okay, not amazing.", helpful: 8 },
+      { id: "r32", author: "Eli S.", school: "University of Minnesota", date: "Jul 2024", rating: 3, text: "Good amenities, but communication lagged during move-out week.", helpful: 5 },
+    ],
+  },
+  {
+    id: "15",
+    name: "Boiler Family Leasing",
+    university: "Purdue University",
+    address: "230 Waldron St, West Lafayette, IN 47906",
+    photoUrl: "https://images.unsplash.com/photo-1551836022-4c4c79ecde51?auto=format&fit=crop&w=500&q=80",
+    bio: "A husband-and-wife team renting a handful of student homes near Purdue.",
+    contactEmail: "leasing@boilerfamilyleasing.com",
+    contactPhone: "(765) 555-0133",
+    reviewedProperties: 6,
+    propertyLocations: ["Chauncey", "Waldron"],
+    properties: [
+      { id: "p18", title: "Waldron Corner House", beds: 3, baths: 2, rent: 2480, groundRules: ["No smoking", "Quiet porch after 10pm", "Tenant responsible for lawn care"] },
+    ],
+    primaryJob: false,
+    avgRating: 4.3,
+    reviewCount: 12,
+    tags: ["Mom-and-Pop", "Helpful", "Well Maintained"],
+    reviews: [
+      { id: "r33", author: "Nina B.", school: "Purdue University", date: "May 2025", rating: 5, text: "Very kind landlords and super clear move-in process. Great experience.", helpful: 10 },
+      { id: "r34", author: "Owen T.", school: "Purdue University", date: "Nov 2024", rating: 4, text: "Not fancy, but clean and fairly priced. They respond quickly.", helpful: 7 },
+    ],
+  },
+  {
+    id: "16",
+    name: "Lionheart Student Residences",
+    university: "Penn State",
+    address: "417 W Beaver Ave, State College, PA 16801",
+    photoUrl: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=500&q=80",
+    bio: "A multi-property student housing operator with renovated units close to central campus.",
+    contactEmail: "team@lionheartresidences.com",
+    contactPhone: "(814) 555-0159",
+    reviewedProperties: 22,
+    propertyLocations: ["Beaver Ave", "Downtown State College"],
+    properties: [
+      { id: "p19", title: "Beaver Avenue Residences", beds: 2, baths: 2, rent: 2580, groundRules: ["No smoking", "Maintenance portal submissions", "Move-out inspection required"] },
+    ],
+    primaryJob: true,
+    avgRating: 3.8,
+    reviewCount: 33,
+    tags: ["Renovated", "Predictable Process"],
+    reviews: [
+      { id: "r35", author: "Maddie F.", school: "Penn State", date: "Apr 2025", rating: 4, text: "Nice renovations and decent communication throughout the lease.", helpful: 9 },
+      { id: "r36", author: "Logan C.", school: "Penn State", date: "Sep 2024", rating: 3, text: "Solid option overall, but some fees felt higher than expected.", helpful: 6 },
+    ],
+  },
 ];
+
+const ONGOING_COMPLAINTS: Record<string, string[]> = {
+  "1": [],
+  "2": ["Heating repair delays in winter", "Deposit deduction disputes still under follow-up"],
+  "3": ["Slow response during peak move-in periods"],
+  "4": [],
+  "5": ["Unresolved mold remediation concerns", "Repeated pest complaints in older units"],
+  "6": [],
+  "7": [],
+  "8": ["Intermittent maintenance delays"],
+  "9": [],
+  "10": ["Repair ticket backlog in one building"],
+  "11": [],
+  "12": ["Long wait times on non-emergency maintenance"],
+  "13": [],
+  "14": ["Move-out fee disputes reported by some tenants"],
+  "15": [],
+  "16": ["Higher-than-expected admin fees reported"],
+};
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -215,14 +466,6 @@ function ratingBg(r: number): string {
   if (r >= 4) return "bg-emerald-50 border-emerald-200";
   if (r >= 3) return "bg-amber-50 border-amber-200";
   return "bg-red-50 border-red-200";
-}
-
-function ratingLabel(r: number): string {
-  if (r >= 4.5) return "Excellent";
-  if (r >= 4) return "Good";
-  if (r >= 3) return "Average";
-  if (r >= 2) return "Poor";
-  return "Avoid";
 }
 
 function normalizeSearch(text: string): string {
@@ -328,9 +571,6 @@ function LandlordCard({
             <div className={`font-['Lora'] font-bold text-xl leading-none ${ratingColor(landlord.avgRating)}`}>
               {landlord.avgRating.toFixed(1)}
             </div>
-            <div className={`text-[10px] font-medium mt-0.5 ${ratingColor(landlord.avgRating)}`}>
-              {ratingLabel(landlord.avgRating)}
-            </div>
           </div>
         </div>
       </div>
@@ -351,13 +591,6 @@ function LandlordCard({
         </p>
       )}
 
-      <div className="flex flex-wrap gap-1.5 mt-3">
-        {landlord.tags.map((t) => (
-          <span key={t} className="text-[10px] bg-secondary text-muted-foreground rounded-full px-2 py-0.5 font-medium">
-            {t}
-          </span>
-        ))}
-      </div>
     </motion.div>
   );
 }
@@ -379,6 +612,13 @@ function ProfileModal({
 }) {
   const [helpfulVotes, setHelpfulVotes] = useState<Record<string, boolean>>({});
   const [bioOpen, setBioOpen] = useState(true);
+
+  const allGroundRules = useMemo(
+    () => Array.from(new Set(landlord.properties.flatMap((property) => property.groundRules))),
+    [landlord],
+  );
+
+  const ongoingComplaints = useMemo(() => ONGOING_COMPLAINTS[landlord.id] ?? [], [landlord.id]);
 
   const ratingDist = useMemo(() => {
     const dist: Record<number, number> = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
@@ -491,6 +731,39 @@ function ProfileModal({
             </AnimatePresence>
           </section>
 
+          {/* Landlord information */}
+          <section className="border border-border rounded-xl p-4 bg-secondary/30 space-y-3">
+            <h3 className="font-['Lora'] font-semibold text-base text-foreground">Landlord Information</h3>
+            <p className="text-xs text-muted-foreground">Properties owned: {landlord.properties.length}</p>
+            <p className="text-xs text-muted-foreground">Primary job: {landlord.primaryJob ? "Yes" : "No"}</p>
+
+            <div>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Ground Rules Across Properties</p>
+              {allGroundRules.length > 0 ? (
+                <ul className="mt-1.5 space-y-1">
+                  {allGroundRules.map((rule) => (
+                    <li key={rule} className="text-xs text-foreground/80">• {rule}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-xs text-muted-foreground mt-1.5">No ground rules listed.</p>
+              )}
+            </div>
+
+            <div>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Ongoing Complaints</p>
+              {ongoingComplaints.length > 0 ? (
+                <ul className="mt-1.5 space-y-1">
+                  {ongoingComplaints.map((complaint) => (
+                    <li key={complaint} className="text-xs text-foreground/80">• {complaint}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-xs text-emerald-700 mt-1.5">No ongoing complaints reported.</p>
+              )}
+            </div>
+          </section>
+
           {/* Property information */}
           <div>
             <h3 className="font-['Lora'] font-semibold text-base mb-3">Property Information</h3>
@@ -516,9 +789,9 @@ function ProfileModal({
             </div>
           </div>
 
-          {/* Average landlord rating */}
+          {/* Landlord rating */}
           <div>
-            <h3 className="font-['Lora'] font-semibold text-base mb-3">Average Landlord Rating</h3>
+            <h3 className="font-['Lora'] font-semibold text-base mb-3">Landlord Rating</h3>
           <div className="flex gap-6 items-center">
             <div className="text-center">
               <div className={`font-['Lora'] font-bold text-5xl ${ratingColor(landlord.avgRating)}`}>
@@ -547,15 +820,6 @@ function ProfileModal({
               })}
             </div>
           </div>
-          </div>
-
-          {/* Tags */}
-          <div className="flex flex-wrap gap-2">
-            {landlord.tags.map((t) => (
-              <span key={t} className="text-xs bg-secondary border border-border text-foreground rounded-full px-3 py-1 font-medium">
-                {t}
-              </span>
-            ))}
           </div>
 
           {/* Most common comments */}
@@ -782,11 +1046,6 @@ function WriteReviewModal({
             <div>
               <label className="block text-sm font-semibold mb-2">
                 Overall Rating
-                {form.rating > 0 && (
-                  <span className={`ml-2 text-xs font-medium ${ratingColor(form.rating)}`}>
-                    — {ratingLabel(form.rating)}
-                  </span>
-                )}
               </label>
               <InteractiveStars value={form.rating} onChange={(v) => setForm((f) => ({ ...f, rating: v }))} />
             </div>
@@ -834,7 +1093,7 @@ export default function App() {
   const [areaQuery, setAreaQuery] = useState("Ann Arbor");
   const [discoverQuery, setDiscoverQuery] = useState("");
   const [landlords, setLandlords] = useState<Landlord[]>(LANDLORDS);
-  const [sortBy, setSortBy] = useState<"highest" | "lowest" | "most_reviewed">("most_reviewed");
+  const [sortBy, setSortBy] = useState<"highest" | "lowest" | "most_reviewed">("highest");
   const [ratingFilter, setRatingFilter] = useState<"all" | "good" | "avg" | "poor">("all");
   const [page, setPage] = useState(1);
   const [profileOpenId, setProfileOpenId] = useState<string | null>(null);
@@ -851,6 +1110,7 @@ export default function App() {
   });
   const [filterOpen, setFilterOpen] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
+  const resultsRef = useRef<HTMLElement>(null);
 
   // close filter dropdown on outside click
   useEffect(() => {
@@ -941,6 +1201,7 @@ export default function App() {
   function handleSearch() {
     setSearchTerm(searchInput);
     setPage(1);
+    resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   function toggleFavorite(landlordId: string) {
@@ -1287,7 +1548,7 @@ export default function App() {
       </section>
 
       {/* ── Results ── */}
-      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
+      <section ref={resultsRef} className="max-w-5xl mx-auto px-4 sm:px-6 py-10 scroll-mt-20">
         {/* Filter bar */}
         <div className="flex items-center justify-between gap-3 mb-6 flex-wrap">
           <div>
@@ -1303,7 +1564,7 @@ export default function App() {
           <div className="flex items-center gap-2 flex-wrap">
             {/* Rating filter pills */}
             {(["all", "good", "avg", "poor"] as const).map((f) => {
-              const labels = { all: "All Ratings", good: "Good (4+)", avg: "Average (3–4)", poor: "Poor (<3)" };
+              const labels = { all: "All Ratings", good: "Good (4+)", avg: "Mid (3–4)", poor: "Below 3" };
               return (
                 <button
                   key={f}
