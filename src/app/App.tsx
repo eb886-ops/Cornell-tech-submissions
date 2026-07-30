@@ -1777,7 +1777,7 @@ export default function App() {
           </div>
           <p className="text-white/30 text-xs text-center">
             Helping students make informed housing decisions since 2024.
-            Reviews are from verified student tenants.
+            Reviews, Landlords, and Properties are artificial.
           </p>
           <div className="flex gap-4 text-xs text-white/40">
             <a href="#" className="hover:text-white/70 transition-colors">Privacy</a>
